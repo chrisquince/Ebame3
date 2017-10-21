@@ -76,6 +76,8 @@ sequence #: 16520	total length: 10477178	max length: 29066	N50: 687	N90: 339
 
 If you have bandage installed locally you can download and view fastg format assembly graph. It is very fragmented.
 
+![Assembly graph](../Figures/Bandage.tiff)
+
 These can also be created from megahit output:
 ```
 cd Assembly1
