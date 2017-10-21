@@ -35,7 +35,55 @@ The first step in the analysis is to assemble the reads.
 
 ### Coassembly
 
-I previously co-assembled the reads using MEGAHIT 1.1.1 and default parameters:
+Before running the assembly have a look at the megahit options:
+```
+megahit
+```
+
+How do we change the choice of kmer sizes? What does `--low-local-ratio` do?
+
+Lets try a few assemblies on one sample, to look at impact of parameters:
+
+```
+megahit -1 Reads/Reads.0.r1.fq.gz -2 Reads/Reads.0.r2.fq.gz -o Assembly1
+```
+
+How good was this assembly?
+
+```
+contig-stats.pl < Assembly1/final.contigs.fa
+```
+
+Should be something like:
+sequence #: 9764	total length: 7066103	max length: 25986	N50: 827	N90: 351
+
+
+Try sensitive mode perhaps?
+
+We can also try spades:
+
+```
+spades.py -1 Reads/Reads.0.r1.fq.gz -2 Reads/Reads.0.r2.fq.gz -t 12 -o Assembly1_S
+```
+
+```
+contig-stats.pl < Assembly1_S/final.contigs.fa
+```
+
+Did that do better or worse than megahit?
+
+sequence #: 16520	total length: 10477178	max length: 29066	N50: 687	N90: 339
+
+If you have bandage installed locally you can download and view fastg format assembly graph. It is very fragmented.
+
+These can also be created from megahit output:
+```
+cd Assembly1
+megahit_toolkit contig2fastg 141 final.contigs.fa > final.contigs.fastg
+cd ..
+```
+
+We will now run the co-assembly I encourage you to try some non-default parameters to see how the results below are impacted.
 
 ```
 ls Reads/*r1*gz | tr "\n" "," | sed 's/,$//' > r1.csv
