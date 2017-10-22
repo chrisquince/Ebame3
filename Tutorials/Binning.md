@@ -90,6 +90,7 @@ spades.py -1 ReadsSub/S102_Sub_R1.fastq -2 Reads/S102_Sub_R2.fastq -t 12 -o Asse
 ```
 contig-stats.pl < Assembly_S102_S/final.contigs.fa
 ```
+sequence #: 169065	total length: 63832885	max length: 39015	N50: 342	N90: 243
 
 Did that do better or worse than megahit?
 
@@ -290,6 +291,9 @@ Then we can run the refinement step of CONCOCT:
 concoct_refine clustering_gt1000_R.csv original_data_gt1000.csv clustering_gt1000_scg_sort.csv 
 ```
 
+The steps up to this point are available in [Annotate](Annotate.sh)
+
+
 This should result in 22 clusters with 75% single copy copy SCGs:
 ```
 python $CONCOCT/scripts/COG_table.py -b ../Annotate/final_contigs_gt1000_c10K.out  -m $CONCOCT/scgs/scg_cogs_min0.97_max1.03_unique_genera.txt -c clustering_refine.csv  --cdd_cog_file $CONCOCT/scgs/cdd_to_cog.tsv > clustering_refine_scg.tsv
@@ -474,7 +478,7 @@ To classify the contigs we need two files a gid to taxid mapping file and a mapp
 
 2. all_taxa_lineage_notnone.tsv
 
-These can also be downloaded from the Dropbox:
+These can also be downloaded from the Dropbox (**do not do this**):
 ``` 
 wget https://www.dropbox.com/s/x4s50f813ok4tqt/gi_taxid_prot.dmp.gz
 wget https://www.dropbox.com/s/honc1j5g7wli3zv/all_taxa_lineage_notnone.tsv.gz
@@ -498,6 +502,14 @@ Then we extract species out:
 ```
 $DESMAN/scripts/Filter.pl 8 < final_contigs_gt1000_c10K_nr_contigs.csv | grep -v "_6" | grep -v "None" > final_contigs_gt1000_c10K_nr_species.csv
 ```
+
+The above steps are all to slow so copy in the AssignTaxa directory:
+
+```
+cd ~/Projects/AD
+cp -r ~/Projects_run/AD/AssignTaxa .
+```
+
 
 These can then be used for a cluster confusion plot:
 ```
@@ -586,6 +598,8 @@ fasttreeMP -nt -gtr < AlignAllR.gfa 2> SelectR.out > AlignAllR.tree
 Visualise this locally with FigTree or on the web with ITOL
 
 ![Methanogen tree](../Figures/MethanoTree.png)
+
+The above steps are all collated here [MAGs](MAGs.sh)
 
 
 ### Annotating to other functional databases
