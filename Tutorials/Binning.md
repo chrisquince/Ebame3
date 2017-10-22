@@ -99,7 +99,7 @@ How do we change the choice of kmer sizes? What does `--low-local-ratio` do?
 Lets try an assembly on one sample:
 
 ```
-megahit -1 ReadsSub/S102_Sub_R1.fastq -2 Reads/S102_Sub_R2.fastq -o Assembly_S102 -t 12
+megahit -1 ReadsSub/S102_Sub_R1.fastq -2 ReadsSub/S102_Sub_R2.fastq -o Assembly_S102 -t 12
 ```
 
 How good was this assembly?
