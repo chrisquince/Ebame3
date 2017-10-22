@@ -38,68 +38,77 @@ This will involve a collection of different software programs:
 
 <a name="coassembly"/>
 
-## Assembly
-
-We will now explore metagenomics assembly using the Ragna sample:
-
-```
-cd ~/Projects/Ragna/NotHuman
-```
-
-Lets have a look at the read lengths (just top 1000000 will do):
-```
-head -n 1000000 sk152_dentine_nothuman.fq > h1e6.fq
-python ~/bin/LengthsQ.py -i h1e6.fq > h1e6.len
-cat h1e6.len | cut -f2 | awk -f ~/bin/median.awk
-```
-
-and try megahit with appropriate kmer sizes:
-```
-megahit -r sk152_dentine_nothuman.fq --k-min 21 --k-max 71 --k-step 20 -o Assembly
-```
-
-Evaluate the assembly:
-
-```
-contig-stats.pl < Assembly/final.contigs.fa
-```
-
-Create assembly graph
-```
-cd Assembly
- megahit_toolkit contig2fastg 71 final.contigs.fa > final.contigs.fastg
-```
-
-This is a reasonable assembly but with relatively few reads actually assembled.
-
-Quickly run centrifuge to see what organisms these derive from:
-
-```
-cd Assembly
-centrifuge -x ~/Databases/Centrifuge/p_compressed -U final.contigs.fa -f --threads 8
-
-```
-
-No Salmonella!
-
-Lets try spades:
-
-```
-spades.py -s sk152_dentine_nothuman.fq -o Assembly_S -k 21,41,61,71
-```
-
-```
-cd ../Assembly_S
-centrifuge -x ~/Databases/Centrifuge/p_compressed -U Contigs.fasta -f --threads 8
-```
-
 ## Co-assembly
 
-We will now return to the AD samples performing a co-assembly of these samples using 
-megahit:
+We shall create a directory Projects for our analysis and move into it:
 
 ```
-cd ~/Projets/AD
+mkdir Projects
+cd Projects
+```
+
+Then create a directory AD and link in the tutorial data:
+
+```
+mkdir AD
+cd AD
+
+ln -s ~/Data/AD/ReadsSub/ .
+```
+
+This is a reduced version of the AD reactor data presented in the lectures.
+Before running any assemblies have a look at the megahit options:
+
+```
+megahit
+```
+
+How do we change the choice of kmer sizes? What does `--low-local-ratio` do?
+
+Lets try an assembly on one sample:
+
+```
+megahit -1 ReadsSub/S102_Sub_R1.fastq -2 Reads/S102_Sub_R1.fastq -o Assembly_S102 -t 12
+```
+
+How good was this assembly?
+
+```
+contig-stats.pl < Assembly_S102/final.contigs.fa
+```
+
+Try sensitive mode perhaps?
+
+We can also try spades:
+
+```
+spades.py ReadsSub/S102_Sub_R1.fastq -2 Reads/S102_Sub_R1.fastq -t 12 -o Assembly_S102_S
+```
+
+```
+contig-stats.pl < Assembly_S102_S/final.contigs.fa
+```
+
+Did that do better or worse than megahit?
+
+
+
+If you have bandage installed locally you can download and view fastg format assembly graph. It is very fragmented.
+
+![Assembly graph](../Figures/Bandage.tiff)
+
+These can also be created from megahit output:
+```
+cd Assembly_S102
+megahit_toolkit contig2fastg 141 final.contigs.fa > final.contigs.fastg
+cd ..
+
+We will now perform a co-assembly of all samples using megahit:
+
+```
+
+cd ~/Projects/AD
+
 ls ReadsSub/*R1.fastq | tr "\n" "," | sed 's/,$//' > R1.csv
 ls ReadsSub/*R2.fastq | tr "\n" "," | sed 's/,$//' > R2.csv
 ```
@@ -134,8 +143,6 @@ cd ..
 Then cut up contigs and place in new dir:
 
 ```bash
-
-
 python $CONCOCT/scripts/cut_up_fasta.py -c 10000 -o 0 -m Assembly/final.contigs.fa > Assembly/final_contigs_c10K.fa
 ```
 
