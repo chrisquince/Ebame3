@@ -240,7 +240,7 @@ This will also likely be too slow so link in instead, so kill job (use kill -9 P
 ```
 cd ~/Projects/AD
 rm -r Concoct
-ln -s ~/Projects_run/AD/Concoct .
+cp -r ~/Projects_run/AD/Concoct .
 ```
 
 The entire process up to this point is available in this script [Binning](Binning.sh)
@@ -265,16 +265,16 @@ Assign COGs change the -c flag which sets number of parallel processes appropria
     $CONCOCT/scripts/RPSBLAST.sh -f final_contigs_gt1000_c10K.faa -p -c 8 -r 1
 ```
 
-These steps will also be too slow so link in Annotate dir:
+These steps will also be too slow so copy in Annotate dir:
 ```
 rm -r Projects/AD/Annotate
-ln -s ~/Projects_run/AD/Annotate .
+cp -r ~/Projects_run/AD/Annotate .
 ```
 
 
 We are also going to refine the output using single-core gene frequencies. First we calculate scg frequencies on the CONCOCT clusters:
 ```
-cd ../Concoct
+cd Concoct
 python $CONCOCT/scripts/COG_table.py -b ../Annotate/final_contigs_gt1000_c10K.out  -m $CONCOCT/scgs/scg_cogs_min0.97_max1.03_unique_genera.txt -c clustering_gt1000.csv  --cdd_cog_file $CONCOCT/scgs/cdd_to_cog.tsv > clustering_gt1000_scg.tsv
 ```
 
@@ -287,7 +287,7 @@ $CONCOCT/scripts/Sort.pl < clustering_gt1000_scg.csv > clustering_gt1000_scg_sor
 
 Then we can run the refinement step of CONCOCT:
 ```
-concoct_refine clustering_gt1000_R.csv original_data_gt1000.csv clustering_gt1000_scg_sort.csv > concoct_ref.out
+concoct_refine clustering_gt1000_R.csv original_data_gt1000.csv clustering_gt1000_scg_sort.csv 
 ```
 
 This should result in 22 clusters with 75% single copy copy SCGs:
