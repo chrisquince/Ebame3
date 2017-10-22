@@ -1,5 +1,36 @@
 <a name="assembly"/>
 
+#Virtual machines
+
+host ebame1
+user ubuntu
+hostname 147.188.173.169
+
+host ebame2
+user ubuntu 
+hostname 147.188.173.63
+
+host copenhagenA
+user ubuntu
+hostname 137.205.69.58
+
+host copenhagenB
+user ubuntu
+hostname 137.205.69.65
+
+host copenhagenC
+user ubuntu
+hostname 137.205.69.47
+
+host copenhagenD
+user ubuntu
+hostname 137.205.69.53
+
+host copenhagenE
+user ubuntu
+hostname 137.205.69.62
+
+
 # Assembly based metagenomics analysis
 
 Assembly based metagenomics represents a complex analysis pathway:
