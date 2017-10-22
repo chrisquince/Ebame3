@@ -68,7 +68,7 @@ How do we change the choice of kmer sizes? What does `--low-local-ratio` do?
 Lets try an assembly on one sample:
 
 ```
-megahit -1 ReadsSub/S102_Sub_R1.fastq -2 Reads/S102_Sub_R1.fastq -o Assembly_S102 -t 12
+megahit -1 ReadsSub/S102_Sub_R1.fastq -2 Reads/S102_Sub_R2.fastq -o Assembly_S102 -t 12
 ```
 
 How good was this assembly?
@@ -77,12 +77,14 @@ How good was this assembly?
 contig-stats.pl < Assembly_S102/final.contigs.fa
 ```
 
+sequence #: 28559	total length: 12950286	max length: 3089	N50: 439	N90: 319
+
 Try sensitive mode perhaps?
 
 We can also try spades:
 
 ```
-spades.py ReadsSub/S102_Sub_R1.fastq -2 Reads/S102_Sub_R1.fastq -t 12 -o Assembly_S102_S
+spades.py -1 ReadsSub/S102_Sub_R1.fastq -2 Reads/S102_Sub_R2.fastq -t 12 -o Assembly_S102_S
 ```
 
 ```
@@ -102,6 +104,7 @@ These can also be created from megahit output:
 cd Assembly_S102
 megahit_toolkit contig2fastg 141 final.contigs.fa > final.contigs.fastg
 cd ..
+```
 
 We will now perform a co-assembly of all samples using megahit:
 
@@ -111,10 +114,17 @@ cd ~/Projects/AD
 
 ls ReadsSub/*R1.fastq | tr "\n" "," | sed 's/,$//' > R1.csv
 ls ReadsSub/*R2.fastq | tr "\n" "," | sed 's/,$//' > R2.csv
+
 ```
 
 ```
-nohup megahit -1 $(<R1.csv) -2 $(<R2.csv) -t 8 -o Assembly > megahit.out&
+megahit -1 $(<R1.csv) -2 $(<R2.csv) -t 12 -o Assembly 
+```
+
+The assembly will take too long so link in the prerun output instead:
+
+```
+ln -s ~/Projects_run/AD/Map ~/Projects/AD
 ```
 
 ```
@@ -128,13 +138,6 @@ sequence #: 469120	total length: 412545660	max length: 444864	N50: 1124	N90: 375
 
 Discussion point what is N50?
 
-If the assembly takes too long download the results instead:
-```
-mkdir Assembly
-cd Assembly
-wget https://septworkshop.s3.climb.ac.uk/final.contigs.fa
-cd ..
-```
 
 <a name="readmapping"/>
 
@@ -196,6 +199,13 @@ do
     bedtools genomecov -ibam ${stub}.mapped.sorted.bam -g Assembly/Lengths.txt > ${stub}_cov.txt
 done
 ```
+
+The above two steps will take too long so link in the prerun directory:
+
+```
+ln -s ~/Projects_run/AD/Map ~/Projects/AD
+```
+
 Collate coverages together:
 
 ```
