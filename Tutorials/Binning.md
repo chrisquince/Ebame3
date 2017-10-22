@@ -357,6 +357,7 @@ cd ..
 
 Kegg ortholog assignment on genes:
 ```
+cd ~/Projects/AD/Split
 python ~/bin/CompleteClusters.py ../Concoct/clustering_refine_scg.tsv > Cluster75.txt
 ```
 
@@ -368,7 +369,7 @@ python ~/bin/CompleteClusters.py ../Concoct/clustering_refine_scg.tsv > Cluster7
     base=${stub##*/}
     echo $base
 
-    diamond blastp -d $KEGG_DB/genes/fasta/genes.dmnd -q $file -p 8 -o ${stub}.m8
+    diamond blastp -d $KEGG_DB/genes/fasta/genes.dmnd -q $file -p 12 -o ${stub}.m8
     done < Cluster75.txt
 ```
 
@@ -431,6 +432,12 @@ python ~/repos/MAGAnalysis/scripts/KO2MODULEclusters2.py -i CollateHits75.csv -o
 ```
 
 Discussion point, when is a module present? What about methanogenesis modules?
+
+How to get module names:
+
+```
+awk -F"," 'NR>1{print $1}' Collate_modules.csv | xargs -I {} curl -s http://rest.kegg.jp/find/module/{} > ModNames.txt
+```
 
 ## Taxonomic classification of contigs
 
