@@ -124,19 +124,14 @@ megahit -1 $(<R1.csv) -2 $(<R2.csv) -t 12 -o Assembly
 The assembly will take too long so link in the prerun output instead:
 
 ```
-ln -s ~/Projects_run/AD/Map ~/Projects/AD
+ln -s ~/Projects_run/AD/Assembly ~/Projects/AD
 ```
 
 ```
 contig-stats.pl < Assembly/final.contigs.fa
 ```
 
-Should see results like:
-```
-sequence #: 469120	total length: 412545660	max length: 444864	N50: 1124	N90: 375
-```
-
-Discussion point what is N50?
+Is this better or worse than the single sample assembly?
 
 
 <a name="readmapping"/>
@@ -236,9 +231,18 @@ Now we can run CONCOCT:
 
     tr "," "\t" < Coverage.csv > Coverage.tsv
 
-    concoct --coverage_file Coverage.tsv --composition_file ../Assembly/final_contigs_c10K.fa -t 8 
+    concoct --coverage_file Coverage.tsv --composition_file ../Assembly/final_contigs_c10K.fa -t 12 
 
 ```
+
+This will also likely be too slow so link in instead:
+
+```
+ln -s ~/Projects_run/AD/Concoct .
+```
+
+The entire process up to this point is available in this script [Binning](Binning.sh)
+
 
 Find genes using prodigal:
 ```
