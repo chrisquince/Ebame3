@@ -235,9 +235,11 @@ Now we can run CONCOCT:
 
 ```
 
-This will also likely be too slow so link in instead:
+This will also likely be too slow so link in instead, so kill job (use kill -9 PID) and remove Concoct dir then:
 
 ```
+cd ~/Projects/AD
+rm -r Concoct
 ln -s ~/Projects_run/AD/Concoct .
 ```
 
@@ -262,6 +264,13 @@ Assign COGs change the -c flag which sets number of parallel processes appropria
     export COGSDB_DIR=~/Databases/rpsblast_cog_db
     $CONCOCT/scripts/RPSBLAST.sh -f final_contigs_gt1000_c10K.faa -p -c 8 -r 1
 ```
+
+These steps will also be too slow so link in Annotate dir:
+```
+rm -r Projects/AD/Annotate
+ln -s ~/Projects_run/AD/Annotate .
+```
+
 
 We are also going to refine the output using single-core gene frequencies. First we calculate scg frequencies on the CONCOCT clusters:
 ```
