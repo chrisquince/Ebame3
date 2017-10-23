@@ -51,7 +51,6 @@ varFile=${stub}sel_var.csv
 
 eFile=${stub}tran_df.csv
 
-
 for g in 1 2 3 4  
 do
 for r in 0 1 2 3 4
@@ -62,7 +61,20 @@ for r in 0 1 2 3 4
 done
 ```
 
+Create a deviance plot for this MAG:
 
+```
+cat */fit.txt | cut -d"," -f2- > Dev.csv
+sed -i '1iH,G,LP,Dev' Dev.csv 
+```
+
+Which we can then visualise:
+
+```
+$DESMAN/scripts/PlotDev.R -l Dev.csv -o Dev.pdf
+```
+
+![Posterior deviance](../Figures/Dev.pdf)
 
 Now we need the TARA sample meta data:
 
