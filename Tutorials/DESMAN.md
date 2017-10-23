@@ -13,6 +13,14 @@ cd ~/repos
 git clone https://github.com/chrisquince/Ebame3.git
 ```
 
+We will also need to install the maps package into R:
+
+```
+sudo R
+>install.packages('maps')
+>q()
+```
+
 Create a directory to work in:
 
 ```
@@ -104,6 +112,18 @@ Rscript ~/repos/Ebame3/scripts/StrainANOVA.R -c TARA_PSW_MAG_00074_scg_3_0/Gamma
 TARA_PSW_MAG_00074,1,0.254687,0.007304,22.544615
 TARA_PSW_MAG_00074,2,0.572026,0.003279,24.734444
 TARA_PSW_MAG_00074,3,0.173287,0.049916,16.924231
+
+and generate the world maps:
+
+```
+~/repos/Ebame3/scripts/TARA_HaploMap.R -g TARA_PSW_MAG_00074_scg_3_0/Gamma_star.csv -c ~/repos/Ebame3/data/TARA-clusters.txt -s ~/repos/Ebame3/data/TARA-samplesR.txt 
+```
+
+![H0](../Figures/WorldMap_H0.pdf)
+
+![H1](../Figures/WorldMap_H1.pdf)
+
+![H2](../Figures/WorldMap_H2.pdf)
 
 ### Accessory gene inference
 
