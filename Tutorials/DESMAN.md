@@ -103,6 +103,58 @@ Now we need the TARA sample meta data:
 wget https://desmantutorial.s3.climb.ac.uk/TARA-samples.csv
 ```
 
+The haplotypes themselves are encoded in the file:
+
+```
+TARA_PSW_MAG_00074_scg_3_0/Filtered_Tau_star.csv
+```
+
+The haplotypes differ on the core genes:
+
+```
+python $DESMAN/scripts/validateSNP2.py TARA_PSW_MAG_00074_scg_3_0/Filtered_Tau_star.csv TARA_PSW_MAG_00074_scg_3_0/Filtered_Tau_star.csv
+```
+
+We can look at abundances and reproducibility of the strains:
+
+```
+python /home/ubuntu/repos/DESMAN/scripts/taucomp.py TARA_PSW_MAG_00074_scg_3_0/Gamma_starR.csv TARA_PSW_MAG_00074_scg_3_*/Filtered_Tau_star.csv
+```
+
+The position encoding is ACGT so what are the base predictions at each variant position? 
+We can turn these into actual sequences with the following commands.
+First, we obtain a list of core genes based on the 36 COGs. These we can get from the core COG filtered file:
+
+```
+cut -d"," -f1 TARA_PSW_MAG_00074_scgcogf.csv | sed '1d' | sort | uniq > core_genes.txt
+```
+
+
+No we need the original cluster sequences and COGs:
+
+```
+wget https://desmantutorial.s3.climb.ac.uk/TARA_PSW_MAG_00074.fa
+wget https://desmantutorial.s3.climb.ac.uk/TARA_PSW_MAG_00074F.cogs
+```
+
+Select the core cogs:
+
+```
+$DESMAN/scripts/SelectContigsPos.pl ~/repos/MAGAnalysis/scgs.txt < TARA_PSW_MAG_00074F.cogs > TARA_PSW_MAG_00074F_core.cogs
+```
+
+Create an output directory:
+
+```
+mkdir SCG_Fasta_3_0
+```
+
+And get the haplotype sequences:
+
+```
+python $DESMAN/scripts/GetVariantsCore.py TARA_PSW_MAG_00074.fa TARA_PSW_MAG_00074F_core.cogs ./TARA_PSW_MAG_00074_scg_3_0/Filtered_Tau_star.csv core_genes.txt -o SCG_Fasta_3_0/
+```
+
 And now we can see if these strains are significantly associated with location:
 
 ```
@@ -147,16 +199,10 @@ Then we need gene coverages:
 python $DESMAN/scripts/CalcGeneCov.py TARA_PSW_MAG_00074.freq > TARA_PSW_MAG_00074_gene_cov.csv
 ```
 
-and a list of core genes based on the 36 COGs. These we can get from the core COG filtered file:
-
-```
-cut -d"," -f1 ../TARA_PSW_MAG_00074_scgcogf.csv | sed '1d' | sort | uniq > core_genes.txt
-```
-
 Then we calculate core gene coverages:
 
 ```
-python $DESMAN/scripts/CalcDelta.py TARA_PSW_MAG_00074_gene_cov.csv core_genes.txt TARA_PSW_MAG_00074_core
+python $DESMAN/scripts/CalcDelta.py TARA_PSW_MAG_00074_gene_cov.csv ../core_genes.txt TARA_PSW_MAG_00074_core
 ```
 
 and finally:
