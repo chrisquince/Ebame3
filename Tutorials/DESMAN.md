@@ -155,7 +155,7 @@ And get the haplotype sequences:
 python $DESMAN/scripts/GetVariantsCore.py TARA_PSW_MAG_00074.fa TARA_PSW_MAG_00074F_core.cogs ./TARA_PSW_MAG_00074_scg_3_0/Filtered_Tau_star.csv core_genes.txt -o SCG_Fasta_3_0/
 ```
 
-![Gene1](Figures/Gene1.png)
+![Gene1](../Figures/Gene1.png)
 
 And now we can see if these strains are significantly associated with location:
 
