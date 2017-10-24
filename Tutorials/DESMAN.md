@@ -155,8 +155,6 @@ And get the haplotype sequences:
 python $DESMAN/scripts/GetVariantsCore.py TARA_PSW_MAG_00074.fa TARA_PSW_MAG_00074F_core.cogs ./TARA_PSW_MAG_00074_scg_3_0/Filtered_Tau_star.csv core_genes.txt -o SCG_Fasta_3_0/
 ```
 
-![Gene1](../Figures/Gene1.png)
-
 And now we can see if these strains are significantly associated with location:
 
 ```
@@ -217,3 +215,17 @@ python $DESMAN/desman/GeneAssign.py ${stub}_coremean_sd_df.csv ${sel_run}/Gamma_
 
 ```
 
+But we will not run this ourselves it is too slow:
+
+```
+cd ~/Projects/DESMANTutorial
+rm -r AllFreq
+cp ~/AllFreq.tar.gz .
+tar -xvzf AllFreq.tar.gz
+```
+
+We can look at the overlap in terms of accessory genes:
+```
+cd AllFreq
+python EtaGamma.py TARA_PSW_MAG_00074etaS_df.csv ../TARA_PSW_MAG_00074_scg_3_0/Gamma_star.csv ../TARA_PSW_MAG_00074_scg_3_0/Filtered_Tau_star.csv
+```
